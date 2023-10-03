@@ -13,6 +13,9 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::where('user_id', auth()->id())->get();
+        return response()->json([
+            $products
+        ], 200);
        
     }
 
@@ -37,7 +40,7 @@ class ProductController extends Controller
         Product::create($product);
         return response()->json([
             'message' => 'Product succesfully created'
-        ], 201);
+        ], 200);
     }
 
     /**
@@ -45,7 +48,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return response()->json($product, 201);
+        return response()->json($product, 200);
     }
 
     /**
@@ -69,7 +72,7 @@ class ProductController extends Controller
 
         return response()->json([
             'message' => 'Product updated succesfully'
-        ], 201);
+        ], 200);
     }
 
     /**
@@ -80,6 +83,6 @@ class ProductController extends Controller
         $product->delete();
         return response()->json([
             'message' => 'Product deleted succesfully'
-        ], 201);
+        ], 200);
     }
 }
