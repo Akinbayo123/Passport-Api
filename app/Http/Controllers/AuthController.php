@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Enums\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -32,19 +33,24 @@ class AuthController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
-
-        $user = User::where('email', $request->email)->first();
+    
         if (auth()->attempt($formField)) {
-            $token = $user->createToken('auth_token')->accessToken;
+            $user = auth()->user();
+            $scope = ($user->role==UserRole::Admin->value) ? '*' : 'subscriber';
+    
+            $token = $user->createToken('auth_token', [$scope])->accessToken;
+    
             return response()->json([
-                'message'=>'Login Succesful',
+                'message' => 'Login Successful',
                 'token' => $token,
             ], 200);
         }
+    
         return response()->json([
             'message' => 'The provided credentials are incorrect',
         ]);
     }
+    
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();

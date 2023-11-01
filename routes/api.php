@@ -32,10 +32,10 @@ Route::middleware('auth:api')->group(function () {
 
 
 //Admin Route
-Route::middleware(['auth:api','admin'])->group(function () {
+Route::middleware(['auth:api','scope:admin'])->group(function () {
     Route::get('admin/users', [AdminController::class, 'users']);
 });
 //Subscriber Route
-Route::middleware(['auth:api','subscriber'])->group(function () {
+Route::middleware(['auth:api','scope:subscriber'])->group(function () {
     Route::get('profile', [SubscriberController::class, 'profile']);
 });
