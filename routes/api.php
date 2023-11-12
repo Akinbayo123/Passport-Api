@@ -3,7 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SubscriberController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,4 +28,14 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::resource('products', ProductController::class);
+});
+
+
+//Admin Route
+Route::middleware(['auth:api','scope:admin'])->group(function () {
+    Route::get('admin/users', [AdminController::class, 'users']);
+});
+//Subscriber Route
+Route::middleware(['auth:api','scope:subscriber'])->group(function () {
+    Route::get('profile', [SubscriberController::class, 'profile']);
 });
