@@ -8,6 +8,8 @@ class SubscriberController extends Controller
 {
     public function profile()
     {
-        return response()->json([auth()->user()], 200);
+        $user = auth()->user();
+
+        return $user ? response()->json([$user], 200) : response()->json(['error' => 'Unauthorized'], 401);
     }
 }
